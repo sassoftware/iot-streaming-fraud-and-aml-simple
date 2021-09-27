@@ -1,0 +1,280 @@
+<rows continue-on-error='false'>
+   <insert table='streamviewer_server'>
+      <values>
+         <value column='id'>1111088214</value>
+         <value column='name'>MBCP_ESP_UC_v14_DSimulator31WithZEROS</value>
+         <value column='host'>xcd7436ac262518c2335a42299ba6741b</value>
+         <value column='port'>80</value>
+         <value column='secure'>0</value>
+         <value column='stats_interval'>1</value>
+         <value column='cpu_percentage'>5</value>
+         <value column='type'>KUBERNETES</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_dashboard'>
+      <values>
+         <value column='id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+         <value column='name'>Stream FAML Demo</value>
+         <value column='creation_time'>1629745927028</value>
+         <value column='description'/>
+         <value column='graph_skin'>crisp</value>
+         <value column='kpi_skin'>basic</value>
+         <value column='properties'/>
+         <value column='key_separator'>.</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>df8d1a99-f021-4970-808b-3a3cea1309b5</value>
+         <value column='name'>rule_two</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>rule_two_filter</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'>descending</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>068b272f-d554-4a11-ac7a-79388bd32497</value>
+         <value column='name'>rkule_three</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>rule_three_alert</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'>descending</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>2a4cede6-09ae-40db-85cb-123fbcbadf0a</value>
+         <value column='name'>rule_two</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>rule_two_alert</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'>descending</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>19d32921-4c7a-433a-9596-6122b199fcaa</value>
+         <value column='name'>restrict_list</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>restricted_list</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'>descending</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>b38e8c57-438c-4f24-bf1d-25002137b23b</value>
+         <value column='name'>input_data</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>stream_trans_in</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'>descending</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_subscriber'>
+      <values>
+         <value column='id'>0e4ed958-ea22-4a06-985c-0b8d44bbbe2e</value>
+         <value column='name'>rule_one</value>
+         <value column='p'>ESFAML_best</value>
+         <value column='cq'>stream_trans_fraud_examples</value>
+         <value column='w'>rule_one_pattern_alert</value>
+         <value column='subscriber_mode'>updating</value>
+         <value column='pagesize'>50</value>
+         <value column='delivery_interval'>500</value>
+         <value column='filter'/>
+         <value column='sort_field'/>
+         <value column='direction'/>
+         <value column='server_id'>-1446958788</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>edb33745-218d-479b-b425-f605310c718a</value>
+         <value column='name'>stream_trans_in</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/stream_trans_in</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>transaction_id,transaction_type,customer_MSISDN,customer_name,customer_name_fuzzy85,customer_country_name,benef_MSISDN,benef_name,tbenef_name_fuzzy85,benef_country_name,amount,merch_id,merch_country_name</value>
+         <value column='options'>showLegend=true,imageWidth=0,imageHeight=0,title=stream_trans_in,orientation=horizontal</value>
+         <value column='hyperlink'/>
+         <value column='x'>108</value>
+         <value column='y'>7</value>
+         <value column='width'>890</value>
+         <value column='height'>409</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>b38e8c57-438c-4f24-bf1d-25002137b23b</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>f077956b-73d3-4808-bcfb-02e69fd22143</value>
+         <value column='name'>stream_trans_in</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/stream_trans_in</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>transaction_id,transaction_type,transaction_date_time,customer_MSISDN,customer_name,customer_name_fuzzy85,customer_country_name,benef_MSISDN,benef_name,tbenef_name_fuzzy85,benef_country_name,amount,merch_id,merch_country_name</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>8</value>
+         <value column='y'>1</value>
+         <value column='width'>1079</value>
+         <value column='height'>412</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>c7eb305f-7b24-4a90-abe6-1eff58259a87</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>0100030c-6093-4f76-9db9-c551cf376de2</value>
+         <value column='name'>rule_two_filter</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/rule_two_filter</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>eventNumber,benef_MSISDN,eventCount,total_money</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>1589</value>
+         <value column='y'>592</value>
+         <value column='width'>512</value>
+         <value column='height'>179</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>df8d1a99-f021-4970-808b-3a3cea1309b5</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>fbbffc92-45b2-40c8-982b-c1c0934b1e70</value>
+         <value column='name'>rule_two_alert</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/rule_two_alert</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>newid,benef_MSISDN,alert_action</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>13</value>
+         <value column='y'>592</value>
+         <value column='width'>1568</value>
+         <value column='height'>150</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>2a4cede6-09ae-40db-85cb-123fbcbadf0a</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>2735c96b-cfc0-47e1-b2ec-6dc1e6ff8ac9</value>
+         <value column='name'>rule_one_pattern_alert</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/rule_one_pattern_alert</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>rule_one_alert_id,customer_MSISDN,rule_message</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>17</value>
+         <value column='y'>432</value>
+         <value column='width'>2071</value>
+         <value column='height'>144</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>0e4ed958-ea22-4a06-985c-0b8d44bbbe2e</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>a4de94fa-4d69-496c-9f79-dd406e8e261b</value>
+         <value column='name'>rule_three_alert</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/rule_three_alert</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>transaction_id,transaction_type,transaction_date_time,customer_MSISDN,customer_name,benef_name,full_name,amount,category,alert_action</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>13</value>
+         <value column='y'>783</value>
+         <value column='width'>2080</value>
+         <value column='height'>114</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>068b272f-d554-4a11-ac7a-79388bd32497</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_chart'>
+      <values>
+         <value column='id'>9a1ab828-4628-41c1-9c8c-4a7e07f2e2f7</value>
+         <value column='name'>restricted_list</value>
+         <value column='win'>ESFAML_best/stream_trans_fraud_examples/restricted_list</value>
+         <value column='event_mode'>updating</value>
+         <value column='visual'>table</value>
+         <value column='fields'>UID,last_name,first_name,full_name,full_name_fuzzy85e,category,title,sub_category,position,age,dob,place_of_birth</value>
+         <value column='options'/>
+         <value column='hyperlink'/>
+         <value column='x'>1042</value>
+         <value column='y'>8</value>
+         <value column='width'>993</value>
+         <value column='height'>410</value>
+         <value column='snapshot'>0</value>
+         <value column='server_id'>-1446958788</value>
+         <value column='subscriber_id'>19d32921-4c7a-433a-9596-6122b199fcaa</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+      </values>
+   </insert>
+   <insert table='streamviewer_field'>
+      <values>
+         <value column='id'>b9052f54-ea7e-4664-8f5f-e239171f356f</value>
+         <value column='name'>transaction_id</value>
+         <value column='text'>Transaction Id</value>
+         <value column='width'>50</value>
+         <value column='is_hyperlink'>0</value>
+         <value column='format_value'>1</value>
+         <value column='dashboard_id'>fca66904-5af3-4bac-bab7-5236a224f5a9</value>
+         <value column='color'>0xffffff</value>
+      </values>
+   </insert>
+</rows>

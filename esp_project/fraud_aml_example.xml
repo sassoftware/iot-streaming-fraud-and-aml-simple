@@ -1,0 +1,286 @@
+<project name="ESFAML_simple_demo" threads="1" pubsub="auto" heartbeat-interval="1">
+  <metadata>
+    <meta id="layout">{"stream_trans_fraud_examples":{"compare_ben_names":{"x":340,"y":180},"one_day_sliding":{"x":50,"y":175},"restricted_list":{"x":340,"y":10},"rule_one_notify":{"x":-195,"y":310},"rule_one_pattern_alert":{"x":-195,"y":165},"rule_three_alert":{"x":340,"y":300},"rule_three_notify":{"x":340,"y":425},"rule_two_aggregate":{"x":50,"y":295},"rule_two_alert":{"x":50,"y":790},"rule_two_clean_state":{"x":50,"y":420},"rule_two_filter":{"x":50,"y":540},"rule_two_functional":{"x":50,"y":665},"rule_two_notify":{"x":50,"y":910},"stream_trans_in":{"x":50,"y":10}}}</meta>
+    <meta id="studioModifiedBy">peter.pugh-jones@sas.com</meta>
+    <meta id="studioModified">1629746047676</meta>
+    <meta id="studioUploadedBy">peter.pugh-jones@sas.com</meta>
+    <meta id="studioUploaded">1629738044971</meta>
+  </metadata>
+  <contqueries>
+    <contquery name="stream_trans_fraud_examples">
+      <windows>
+        <window-source insert-only="true" autogen-key="true" name="stream_trans_in">
+          <description><![CDATA[This is where all the transactions come in.]]></description>
+          <schema>
+            <fields>
+              <field name="transaction_id" type="string" key="true"/>
+              <field name="transaction_type" type="string"/>
+              <field name="transaction_date_time" type="date"/>
+              <field name="customer_MSISDN" type="string"/>
+              <field name="customer_name" type="string"/>
+              <field name="customer_name_fuzzy85" type="string"/>
+              <field name="customer_country_name" type="string"/>
+              <field name="benef_MSISDN" type="string"/>
+              <field name="benef_name" type="string"/>
+              <field name="tbenef_name_fuzzy85" type="string"/>
+              <field name="benef_country_name" type="string"/>
+              <field name="amount" type="money"/>
+              <field name="merch_id" type="string"/>
+              <field name="merch_country_name" type="string"/>
+            </fields>
+          </schema>
+          <connectors>
+            <connector class="fs" name="transactions_streaming_in" active="false">
+              <properties>
+                <property name="type"><![CDATA[pub]]></property>
+                <property name="fsname"><![CDATA[/mnt/data/esfaml/input_transactions.csv]]></property>
+                <property name="fstype"><![CDATA[csv]]></property>
+              </properties>
+            </connector>
+          </connectors>
+        </window-source>
+        <window-aggregate name="rule_two_aggregate">
+          <schema>
+            <fields>
+              <field name="benef_MSISDN" type="string" key="true"/>
+              <field name="eventCount" type="int64"/>
+              <field name="total_money" type="money"/>
+            </fields>
+          </schema>
+          <output>
+            <field-expr><![CDATA[ESP_aCount()]]></field-expr>
+            <field-expr><![CDATA[ESP_aSum(amount)]]></field-expr>
+          </output>
+        </window-aggregate>
+        <window-copy name="one_day_sliding">
+          <retention type="bytime_sliding" field="transaction_date_time"><![CDATA[1 days]]></retention>
+        </window-copy>
+        <window-functional index="pi_EMPTY" name="rule_two_functional">
+          <schema>
+            <fields>
+              <field name="newid" type="string" key="true"/>
+              <field name="benef_MSISDN" type="string"/>
+              <field name="eventCount" type="int64"/>
+              <field name="alert_action" type="string"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="newid"><![CDATA[1]]></function>
+              <function name="alert_action"><![CDATA[this beneficiary has recevied payments from three or more people in the last 24 hours - DECLINE ADVISED]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+        <window-remove-state remove="deletes retentionUpdates retentionDeletes updateBlockDeletes" name="rule_two_clean_state"/>
+        <window-filter name="rule_two_filter">
+          <expression><![CDATA[eventCount  >= 3]]></expression>
+        </window-filter>
+        <window-aggregate name="rule_two_alert">
+          <schema>
+            <fields>
+              <field name="benef_MSISDN" type="string"/>
+              <field name="newid" type="string" key="true"/>
+              <field name="alert_action" type="string"/>
+            </fields>
+          </schema>
+          <output>
+            <field-expr><![CDATA[ESP_aLast(benef_MSISDN)]]></field-expr>
+            <field-expr><![CDATA[ESP_aLast(alert_action)]]></field-expr>
+          </output>
+        </window-aggregate>
+        <window-pattern name="rule_one_pattern_alert">
+          <schema>
+            <fields>
+              <field name="rule_one_alert_id" type="int64" key="true"/>
+              <field name="customer_MSISDN" type="string"/>
+              <field name="rule_message" type="string"/>
+            </fields>
+          </schema>
+          <patterns>
+            <pattern name="same_cust_ten_mins">
+              <events>
+                <event name="cust_dup1" source="stream_trans_in"><![CDATA[val==customer_MSISDN and transaction_type=="Cash out" and trnstype==transaction_type]]></event>
+                <event name="cust_dup2" source="stream_trans_in"><![CDATA[val==customer_MSISDN and trnstype==transaction_type]]></event>
+                <event name="cust_dup3" source="stream_trans_in"><![CDATA[val==customer_MSISDN and trnstype==transaction_type]]></event>
+                <event name="cust_dup4" source="stream_trans_in"><![CDATA[val==customer_MSISDN and trnstype==transaction_type]]></event>
+              </events>
+              <logic><![CDATA[ fby{10 minutes} (cust_dup1,cust_dup2,cust_dup3,cust_dup4)]]></logic>
+              <output>
+                <field-selection name="customer_MSISDN" node="cust_dup4"/>
+                <field-expr node="cust_dup4"><![CDATA["four cash out transactions for the same customer within 10 minute period alert - DECLINE ADVISED"]]></field-expr>
+              </output>
+              <timefields>
+                <timefield source="stream_trans_in" field="transaction_date_time"/>
+              </timefields>
+            </pattern>
+          </patterns>
+        </window-pattern>
+        <window-source name="restricted_list">
+          <schema>
+            <fields>
+              <field name="UID" type="string" key="true"/>
+              <field name="last_name" type="string"/>
+              <field name="first_name" type="string"/>
+              <field name="full_name" type="string"/>
+              <field name="full_name_fuzzy85e" type="string"/>
+              <field name="category" type="string"/>
+              <field name="title" type="string"/>
+              <field name="sub_category" type="string"/>
+              <field name="position" type="string"/>
+              <field name="age" type="string"/>
+              <field name="dob" type="string"/>
+              <field name="place_of_birth" type="string"/>
+            </fields>
+          </schema>
+        </window-source>
+        <window-join name="compare_ben_names">
+          <join type="inner">
+            <conditions>
+              <fields left="tbenef_name_fuzzy85" right="full_name_fuzzy85e"/>
+            </conditions>
+          </join>
+          <output>
+            <field-selection name="transaction_type" source="l_transaction_type"/>
+            <field-selection name="transaction_date_time" source="l_transaction_date_time"/>
+            <field-selection name="customer_MSISDN" source="l_customer_MSISDN"/>
+            <field-selection name="customer_name" source="l_customer_name"/>
+            <field-selection name="customer_name_fuzzy85" source="l_customer_name_fuzzy85"/>
+            <field-selection name="customer_country_name" source="l_customer_country_name"/>
+            <field-selection name="benef_name" source="l_benef_name"/>
+            <field-selection name="tbenef_name_fuzzy85" source="l_tbenef_name_fuzzy85"/>
+            <field-selection name="benef_country_name" source="l_benef_country_name"/>
+            <field-selection name="amount" source="l_amount"/>
+            <field-selection name="merch_id" source="l_merch_id"/>
+            <field-selection name="merch_country_name" source="l_merch_country_name"/>
+            <field-selection name="last_name" source="r_last_name"/>
+            <field-selection name="first_name" source="r_first_name"/>
+            <field-selection name="full_name" source="r_full_name"/>
+            <field-selection name="full_name_fuzzy85e" source="r_full_name_fuzzy85e"/>
+            <field-selection name="category" source="r_category"/>
+            <field-selection name="age" source="r_age"/>
+            <field-selection name="dob" source="r_dob"/>
+            <field-selection name="place_of_birth" source="r_place_of_birth"/>
+          </output>
+        </window-join>
+        <window-functional name="rule_three_alert">
+          <schema>
+            <fields>
+              <field name="transaction_id" type="string" key="true"/>
+              <field name="transaction_type" type="string"/>
+              <field name="transaction_date_time" type="date"/>
+              <field name="customer_MSISDN" type="string"/>
+              <field name="customer_name" type="string"/>
+              <field name="benef_name" type="string"/>
+              <field name="full_name" type="string"/>
+              <field name="amount" type="money"/>
+              <field name="category" type="string"/>
+              <field name="alert_action" type="string"/>
+            </fields>
+          </schema>
+          <function-context>
+            <functions>
+              <function name="alert_action"><![CDATA[the beneficiary of this has an 85% match code against the restriced list *** DOWNSTREAM INVESTIGATION ADVISED ***]]></function>
+            </functions>
+          </function-context>
+        </window-functional>
+        <window-notification name="rule_one_notify">
+          <schema>
+            <fields>
+              <field name="rule_one_alert_id" type="int64" key="true"/>
+              <field name="customer_MSISDN" type="string"/>
+              <field name="rule_message" type="string"/>
+            </fields>
+          </schema>
+          <smtp host="smtp-relay.sendinblue.com" user="whateveryouremail@somewhere.com" password="PUT_VALID_PASSWORD_HERE" port="587"/>
+          <delivery-channels>
+            <email throttle-interval="5 seconds" name="New_Channel_1">
+              <deliver><![CDATA[1]]></deliver>
+              <email-info>
+                <sender><![CDATA[whateveryouremail@somewhere.com]]></sender>
+                <recipients><![CDATA[arecipient@somewhere.com]]></recipients>
+                <subject><![CDATA[RULE 1 ALERT - INVESTIGATION ADVISED]]></subject>
+                <from><![CDATA[esp demo system]]></from>
+                <to><![CDATA[arecipient@somewhere.com]]></to>
+              </email-info>
+              <email-contents>
+                <text-content name="message_output"><![CDATA[customer $customer_MSISDN has made four cash out transactions within 10 minutes alert - DECLINE ADVISED]]></text-content>
+              </email-contents>
+            </email>
+          </delivery-channels>
+        </window-notification>
+        <window-notification name="rule_two_notify">
+          <schema>
+            <fields>
+              <field name="benef_MSISDN" type="string"/>
+              <field name="newid" type="string" key="true"/>
+              <field name="alert_action" type="string"/>
+            </fields>
+          </schema>
+          <smtp host="smtp-relay.sendinblue.com" user="whateveryouremail@somewhere.com" password="PUT_VALID_PASSWORD_HERE" port="587"/>
+          <delivery-channels>
+            <email throttle-interval="5 seconds" name="New_Channel_1">
+              <deliver><![CDATA[1]]></deliver>
+              <email-info>
+                <sender><![CDATA[whateveryouremail@somewhere.com]]></sender>
+                <recipients><![CDATA[arecipient@somewhere.com]]></recipients>
+                <subject><![CDATA[RULE 2 ALERT - DECLINE TRANSACTION ADVISED]]></subject>
+                <from><![CDATA[esp demo system]]></from>
+                <to><![CDATA[arecipient@somewhere.com]]></to>
+              </email-info>
+              <email-contents>
+                <text-content name="message_output"><![CDATA[The beneficiary $benef_MSISDN has recevied payments from three or more people in the last 24 hours - DECLINE ADVISED]]></text-content>
+              </email-contents>
+            </email>
+          </delivery-channels>
+        </window-notification>
+        <window-notification name="rule_three_notify">
+          <schema>
+            <fields>
+              <field name="transaction_id" type="string" key="true"/>
+              <field name="transaction_type" type="string"/>
+              <field name="transaction_date_time" type="date"/>
+              <field name="customer_MSISDN" type="string"/>
+              <field name="customer_name" type="string"/>
+              <field name="benef_name" type="string"/>
+              <field name="full_name" type="string"/>
+              <field name="amount" type="money"/>
+              <field name="category" type="string"/>
+              <field name="alert_action" type="string"/>
+            </fields>
+          </schema>
+          <smtp host="smtp-relay.sendinblue.com" user="whateveryouremail@somewhere.com" password="PUT_VALID_PASSWORD_HERE" port="587"/>
+          <delivery-channels>
+            <email throttle-interval="5 seconds" name="New_Channel_1">
+              <deliver><![CDATA[1]]></deliver>
+              <email-info>
+                <sender><![CDATA[whateveryouremail@somewhere.com]]></sender>
+                <recipients><![CDATA[arecipient@somewhere.com]]></recipients>
+                <subject><![CDATA[RULE 3 ALERT - INVESTIGATION ADVISED]]></subject>
+                <from><![CDATA[esp demo system]]></from>
+                <to><![CDATA[arecipient@somewhere.com]]></to>
+              </email-info>
+              <email-contents>
+                <text-content name="message_output"><![CDATA[$transaction_id for $benef_name is very similar to $full_name which is an 85% match code on the restriced list *** DOWNSTREAM INVESTIGATION ADVISED ***]]></text-content>
+              </email-contents>
+            </email>
+          </delivery-channels>
+        </window-notification>
+      </windows>
+      <edges>
+        <edge source="one_day_sliding" target="rule_two_aggregate"/>
+        <edge source="stream_trans_in" target="one_day_sliding"/>
+        <edge source="rule_two_aggregate" target="rule_two_clean_state"/>
+        <edge source="rule_two_clean_state" target="rule_two_filter"/>
+        <edge source="rule_two_filter" target="rule_two_functional"/>
+        <edge source="rule_two_functional" target="rule_two_alert"/>
+        <edge source="stream_trans_in" target="rule_one_pattern_alert"/>
+        <edge source="stream_trans_in" target="compare_ben_names" role="left"/>
+        <edge source="restricted_list" target="compare_ben_names" role="right"/>
+        <edge source="compare_ben_names" target="rule_three_alert"/>
+        <edge source="rule_one_pattern_alert" target="rule_one_notify"/>
+        <edge source="rule_two_alert" target="rule_two_notify"/>
+        <edge source="rule_three_alert" target="rule_three_notify"/>
+      </edges>
+    </contquery>
+  </contqueries>
+</project>
